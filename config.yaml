@@ -1,0 +1,4 @@
+package_name: curl
+repository_url: http://archive.ubuntu.com/ubuntu/dists/jammy/main/binary-amd64/Packages.gz
+test_mode: false
+output_file: graph.png
