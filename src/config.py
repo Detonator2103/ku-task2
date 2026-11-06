@@ -15,10 +15,8 @@ PACKAGE_PATTERN = re.compile(r"^[a-z0-9][a-z0-9+.\-]+$")
 
 class ConfigError(Exception):
     pass
-    # Ошибка в конфигурации
 
 def load_config(path):
-    # Чтение YAML и возвращение словаря
     if not os.path.isfile(path):
         raise ConfigError(f"файл конфигурации не найден: {path}")
     try:

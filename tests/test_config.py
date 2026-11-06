@@ -4,11 +4,10 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from config import ConfigError, validate_config  # noqa: E402
+from config import ConfigError, validate_config
 
 
 def make_config(**changes):
-    # Корректная конфигурация с заменой отдельных полей
     config = {
         "package_name": "curl",
         "repository_url": "http://example.com/Packages.gz",
@@ -20,8 +19,6 @@ def make_config(**changes):
 
 
 class ConfigTest(unittest.TestCase):
-    # Тесты
-
     def test_valid(self):
         validate_config(make_config())
 
