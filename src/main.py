@@ -1,6 +1,7 @@
 import argparse
 import sys
 
+from apt import AptError, get_dependencies, parse_packages, read_index
 from config import ConfigError, load_config, validate_config
 
 EXIT_OK = 0
@@ -18,11 +19,15 @@ def main():
     try:
         config = load_config(args.config)
         validate_config(config)
-    except ConfigError as error:
-        print(f"Ошибка конфигурации: {error}", file=sys.stderr)
+        text = read_index(config["repository_url"], config["test_mode"])
+        packages = parse_packages(text)
+        deps = get_dependencies(config["package_name"], packages)
+    except (ConfigError, AptError) as error:
+        print(f"Ошибка: {error}", file=sys.stderr)
         return EXIT_ERROR
-    for key, value in config.items():
-        print(f"{key}: {value}")
+    print(f"Прямые зависимости пакета {config['package_name']}:")
+    for dep in deps:
+        print(f"  {dep}")
     return EXIT_OK
 
 

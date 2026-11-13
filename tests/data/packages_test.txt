@@ -1,0 +1,10 @@
+Package: a
+Version: 1.0
+Depends: b (>= 1.0), c | d, libx:any
+
+Package: b
+Version: 1.0
+Depends: c
+
+Package: c
+Version: 1.0
