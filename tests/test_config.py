@@ -41,13 +41,38 @@ class ConfigTest(unittest.TestCase):
             validate_config(make_config(repository_url="ftp://x"))
 
     def test_missing_test_file(self):
-        config = make_config(test_mode=True, repository_url="nope.txt")
+        config = make_config(
+            test_mode=True,
+            repository_url="nope.txt",
+            package_name="A",
+        )
         with self.assertRaises(ConfigError):
             validate_config(config)
 
     def test_bad_extension(self):
         with self.assertRaises(ConfigError):
             validate_config(make_config(output_file="graph.txt"))
+
+    def test_test_mode_uppercase_name(self):
+        config = make_config(
+            test_mode=True,
+            repository_url=__file__,
+            package_name="A",
+        )
+        validate_config(config)
+
+    def test_test_mode_lowercase_name(self):
+        config = make_config(
+            test_mode=True,
+            repository_url=__file__,
+            package_name="a",
+        )
+        with self.assertRaises(ConfigError):
+            validate_config(config)
+
+    def test_uppercase_name_in_real_mode(self):
+        with self.assertRaises(ConfigError):
+            validate_config(make_config(package_name="A"))
 
 
 if __name__ == "__main__":
