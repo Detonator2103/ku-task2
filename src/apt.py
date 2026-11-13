@@ -80,3 +80,12 @@ def get_dependencies(name, packages):
             if dep not in result:
                 result.append(dep)
     return result
+
+def make_apt_provider(packages):
+
+    def provider(name):
+        if name not in packages:
+            return None
+        return get_dependencies(name, packages)
+
+    return provider

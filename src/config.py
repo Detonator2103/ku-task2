@@ -11,7 +11,7 @@ REQUIRED_KEYS = [
 IMAGE_EXTENSIONS = (".png", ".svg", ".jpg")
 URL_PREFIXES = ("http://", "https://")
 PACKAGE_PATTERN = re.compile(r"^[a-z0-9][a-z0-9+.\-]+$")
-
+TEST_PACKAGE_PATTERN = re.compile(r"^[A-Z]+$")
 
 class ConfigError(Exception):
     pass
@@ -31,7 +31,11 @@ def load_config(path):
 
 def check_package_name(config):
     name = config["package_name"]
-    if not isinstance(name, str) or not PACKAGE_PATTERN.match(name):
+    if config["test_mode"]:
+        pattern = TEST_PACKAGE_PATTERN
+    else:
+        pattern = PACKAGE_PATTERN
+    if not isinstance(name, str) or not pattern.match(name):
         raise ConfigError(f"некорректное имя пакета: {name!r}")
 
 
@@ -67,7 +71,7 @@ def validate_config(config):
     for key in REQUIRED_KEYS:
         if key not in config:
             raise ConfigError(f"отсутствует параметр: {key}")
-    check_package_name(config)
     check_test_mode(config)
+    check_package_name(config)
     check_repository(config)
     check_output_file(config)
